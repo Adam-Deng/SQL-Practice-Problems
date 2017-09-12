@@ -49,4 +49,9 @@ OrderID     OrderDate  Shipper
 (52 row(s) affected)
  
 
- 
+SELECT o.OrderID, date(o.OrderDate), s.CompanyName as Shipper
+FROM Orders as o
+LEFT JOIN Shippers as s
+ON o.SHipVia = s.ShipperID
+WHERE o.OrderID < 10300
+ORDER BY o.OrderID
