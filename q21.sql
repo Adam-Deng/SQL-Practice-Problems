@@ -43,3 +43,7 @@ Belgium         Bruxelles       1
 (69 row(s) affected)
 
 
+SELECT Country, City, count(*) AS TotalCustomer
+FROM Customers
+GROUP BY Country, City
+ORDER BY TotalCustomer DESC
