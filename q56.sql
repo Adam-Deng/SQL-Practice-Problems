@@ -2,11 +2,14 @@
 
 There are some customers for whom freight is a major expense when ordering from Northwind.
 
-However, by batching up their orders, and making one larger order instead of multiple smaller orders in a short period of time, they could reduce their freight costs significantly.
+However, by batching up their orders, and making one larger order instead of multiple smaller
+ orders in a short period of time, they could reduce their freight costs significantly.
 
-Show those customers who have made more than 1 order in a 5 day period. The sales people will use this to help customers reduce their costs.
+Show those customers who have made more than 1 order in a 5 day period. The sales people will
+ use this to help customers reduce their costs.
 
-Note: There are more than one way of solving this kind of problem. For this problem, we will not be using Window functions.
+Note: There are more than one way of solving this kind of problem. For this problem, we will
+ not be using Window functions.
 
 Expected Result
 
@@ -46,3 +49,12 @@ WILMK      10873          2016-02-06       10879       2016-02-10    4
  
 (71 row(s) affected)
 
+SELECT InitialOrder.CustomerID, InitialOrder.OrderID AS InitialOrderID,
+InitialOrder.OrderDate AS InitialOrderDate, NextOrder.OrderID AS NextOrderID,
+NextOrder.OrderDate AS NextOrderDate, DATEDIFF(NextOrderDate, InitialOrderDate) AS DaysBetween
+FROM Orders AS InitialOrder
+INNER JOIN Orders AS NextOrder
+ON InitialOrder.CustomerID = NextOrder.CustomerID
+WHERE InitialOrder.OrderID < NextOrder.OrderID
+AND DATEDIFF(NextOrderDate, InitialOrderDate) <= 5
+ORDER BY InitialOrder.CustomerID, InitialOrder.OrderID

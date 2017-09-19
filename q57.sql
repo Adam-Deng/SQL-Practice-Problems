@@ -1,6 +1,7 @@
 57.            Customers with multiple orders in 5 day period, version 2
 
-There’s another way of solving the problem above, using Window functions. We would like to see the following results.
+There’s another way of solving the problem above, using Window functions. We would like to see
+ the following results.
 
 Expected Results
 
@@ -40,3 +41,14 @@ WILMK      2016-02-06 2016-02-10    4
  
 (69 row(s) affected)
 
+SQL SERVER Solution:
+
+WITH NextOrderDate AS (
+SELECT CustomerID, OrderDate, 
+LEAD(OrderDate,1) OVER (PARTITION BY CustomerID ORDER BY CustomerID, OrderDate) AS NextOrderDate
+FROM orders
+)
+
+SELECT CustomerID, OrderDate, NextOrderDate, DATEDIFF(NextOrderDate, OrderDate) AS DaysBetweenOrders
+FROM NextOrderDate
+WHERE DATADIFF(NextOrderDate, OrderDate) <= 5
